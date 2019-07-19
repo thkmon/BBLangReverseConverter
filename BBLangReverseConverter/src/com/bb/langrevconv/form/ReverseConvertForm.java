@@ -44,7 +44,7 @@ public class ReverseConvertForm extends JFrame {
 		} else {
 			defaultFolderPath = "C:\\";
 			defaultExtension = "*";
-			defaultLangFilePath = "";
+			defaultLangFilePath = "C:\\flow_ko_KR.txt";
 		}
 		
 		final String dirPath = defaultFolderPath;
