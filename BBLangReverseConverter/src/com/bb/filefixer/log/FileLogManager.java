@@ -64,9 +64,9 @@ public class FileLogManager {
 			
 		} finally {
 			if (bError) {
-				flushAndClose(bufferedWriter);
-				flushAndClose(outputStreamWriter);
-				flushAndClose(fileOutputStream);
+				close(bufferedWriter);
+				close(outputStreamWriter);
+				close(fileOutputStream);
 			}
 		}
 	}
@@ -76,9 +76,9 @@ public class FileLogManager {
 	 * 로그 파일 닫기
 	 */
 	public void closeLogFile() {
-		flushAndClose(bufferedWriter);
-		flushAndClose(outputStreamWriter);
-		flushAndClose(fileOutputStream);
+		close(bufferedWriter);
+		close(outputStreamWriter);
+		close(fileOutputStream);
 	}
 	
 	
@@ -115,9 +115,9 @@ public class FileLogManager {
 
 		} finally {
 			if (bError) {
-				flushAndClose(bufferedWriter);
-				flushAndClose(outputStreamWriter);
-				flushAndClose(fileOutputStream);
+				close(bufferedWriter);
+				close(outputStreamWriter);
+				close(fileOutputStream);
 			}
 		}
 
@@ -125,15 +125,7 @@ public class FileLogManager {
 	}
 	
 	
-	private static void flushAndClose(BufferedWriter bufferedWriter) {
-		try {
-			if (bufferedWriter != null) {
-				bufferedWriter.flush();
-			}
-		} catch (Exception e) {
-			// 무시
-		}
-
+	private static void close(BufferedWriter bufferedWriter) {
 		try {
 			if (bufferedWriter != null) {
 				bufferedWriter.close();
@@ -147,16 +139,7 @@ public class FileLogManager {
 	}
 
 	
-	private static void flushAndClose(OutputStreamWriter outputStreamWriter) {
-
-		try {
-			if (outputStreamWriter != null) {
-				outputStreamWriter.flush();
-			}
-		} catch (Exception e) {
-			// 무시
-		}
-
+	private static void close(OutputStreamWriter outputStreamWriter) {
 		try {
 			if (outputStreamWriter != null) {
 				outputStreamWriter.close();
@@ -170,15 +153,7 @@ public class FileLogManager {
 	}
 
 	
-	private static void flushAndClose(FileOutputStream fileOutputStream) {
-		try {
-			if (fileOutputStream != null) {
-				fileOutputStream.flush();
-			}
-		} catch (Exception e) {
-			// 무시
-		}
-
+	private static void close(FileOutputStream fileOutputStream) {
 		try {
 			if (fileOutputStream != null) {
 				fileOutputStream.close();

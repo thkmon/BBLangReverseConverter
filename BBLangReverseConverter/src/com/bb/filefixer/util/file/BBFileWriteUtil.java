@@ -52,23 +52,16 @@ public class BBFileWriteUtil {
 			throw e;
 
 		} finally {
-			flushAndClose(bufferedWriter);
-			flushAndClose(outputStreamWriter);
-			flushAndClose(fileOutputStream);
+			close(bufferedWriter);
+			close(outputStreamWriter);
+			close(fileOutputStream);
 		}
 
 		return bWrite;
 	}
 	
 	
-	public static void flushAndClose(BufferedWriter obj) {
-		try {
-			if (obj != null) {
-				obj.flush();
-			}
-		} catch (Exception e) {
-		}
-		
+	public static void close(BufferedWriter obj) {
 		try {
 			if (obj != null) {
 				obj.close();
@@ -81,14 +74,7 @@ public class BBFileWriteUtil {
 	}
 	
 	
-	public static void flushAndClose(OutputStreamWriter obj) {
-		try {
-			if (obj != null) {
-				obj.flush();
-			}
-		} catch (Exception e) {
-		}
-		
+	public static void close(OutputStreamWriter obj) {
 		try {
 			if (obj != null) {
 				obj.close();
@@ -101,14 +87,7 @@ public class BBFileWriteUtil {
 	}
 	
 	
-	public static void flushAndClose(FileOutputStream obj) {
-		try {
-			if (obj != null) {
-				obj.flush();
-			}
-		} catch (Exception e) {
-		}
-		
+	public static void close(FileOutputStream obj) {
 		try {
 			if (obj != null) {
 				obj.close();
