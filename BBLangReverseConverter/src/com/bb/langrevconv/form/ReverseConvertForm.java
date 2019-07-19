@@ -39,7 +39,7 @@ public class ReverseConvertForm extends JFrame {
 		if (defaultPropertiesMap != null) {
 			defaultFolderPath = StringUtil.emptyToDefault(defaultPropertiesMap.get("defaultFolderPath"), "C:\\");
 			defaultExtension = StringUtil.emptyToDefault(defaultPropertiesMap.get("defaultExtension"), "*");
-			defaultLangFilePath = StringUtil.emptyToDefault(defaultPropertiesMap.get("defaultLangFilePath"), "");
+			defaultLangFilePath = StringUtil.emptyToDefault(defaultPropertiesMap.get("defaultLangFilePath"), "C:\\flow_ko_KR.txt");
 			
 		} else {
 			defaultFolderPath = "C:\\";
