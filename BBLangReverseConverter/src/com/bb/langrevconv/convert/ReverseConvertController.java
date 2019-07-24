@@ -195,27 +195,56 @@ public class ReverseConvertController {
 				}
 				
 				// 예를 들면, XFLocale.getString("lang.flow", "MC1203") 를 "문자열" 로 변경
-				int idx1 = oneLine.indexOf("XFLocale.getString");
-				int idx2 = oneLine.indexOf("(", idx1 + 1);
-				int idx3 = oneLine.indexOf("\"lang.flow\"", idx2 + 1);
-				int idx4 = oneLine.indexOf(",", idx3 + 1);
-				int idx5 = oneLine.indexOf("\"", idx4 + 1);
-				int idx6 = oneLine.indexOf("\"", idx5 + 1);
-				int idx7 = oneLine.indexOf(")", idx6 + 1);
-				if (idx1 > -1 && idx2 > -1 && idx3 > -1 && idx4 > -1 && idx5 > -1 && idx6 > -1 && idx7 > -1) {
-					// logger.debug("[AS-IS] " + oneLine);
-					String code = oneLine.substring(idx5 + 1, idx6);
-					if (code != null && code.length() > 0) {
-						String value = langKoFile.getKeyMap().get(code);
-						if (value != null && value.length() > 0) {
-							String newLine = oneLine.substring(0, idx1) + "\"" + value + "\"" + oneLine.substring(idx7 + 1);
-							// logger.debug("[TO-BE] " + newLine);
-							oneFileContent.set(i, newLine);
-							
-							if (!bModified) {
-								bModified = true;
-							}
+				int idxForSearch = 0;
+				
+				while (true) {
+					int idx1 = oneLine.indexOf("XFLocale.getString", idxForSearch);
+					if (idx1 < 0) {
+						break;
+					}
+					
+					int idx2 = oneLine.indexOf("(", idx1 + 1);
+					int idx3 = oneLine.indexOf("\"lang.flow\"", idx2 + 1);
+					int idx4 = oneLine.indexOf(",", idx3 + 1);
+					int idx5 = oneLine.indexOf("\"", idx4 + 1);
+					int idx6 = oneLine.indexOf("\"", idx5 + 1);
+					int idx7 = oneLine.indexOf(")", idx6 + 1);
+					if (idx1 > -1 && idx2 > -1 && idx3 > -1 && idx4 > -1 && idx5 > -1 && idx6 > -1 && idx7 > -1) {
+						// logger.debug("[AS-IS] " + oneLine);
+						String code = oneLine.substring(idx5 + 1, idx6);
+						if (code == null || code.length() == 0) {
+							// 코드값(ex : XX0000)이 없는 경우 다음 XFLocale 을 찾는다.
+							idxForSearch = idx7 + 1;
+							continue;
 						}
+						
+						String value = langKoFile.getKeyMap().get(code);
+						if (value == null || value.length() == 0) {
+							// 밸류값(ex : "결재")이 없는 경우 다음 XFLocale 을 찾는다.
+							idxForSearch = idx7 + 1;
+							continue;
+						}
+						
+						oneLine = oneLine.substring(0, idx1) + "\"" + value + "\"" + oneLine.substring(idx7 + 1);
+						// logger.debug("[TO-BE] " + oneLine);
+						oneFileContent.set(i, oneLine);
+						
+						// 수정함
+						if (!bModified) {
+							bModified = true;
+						}
+						
+						// idx1 : 역변환 성공한 문자열의 여는 따옴표
+						// + value.length() : 역변환 성공한 문자열의 길이
+						// + 1 : 닫는 따옴표
+						int idxLastDoubleQuote = idx1 + value.length() + 1;
+						
+						// 닫는 따옴표 다음부터 XFLocale.getString 문자열이 존재하는지 찾는다. 한 줄에 XFLocale.getString 2개 이상 있는 경우 계속 진행하기 위함.
+						idxForSearch = idxLastDoubleQuote + 1;
+						
+					} else {
+						// 비정상적인 XFLocale.getString 이 발견되었을 경우 그만둔다.
+						break;
 					}
 				}
 			}
