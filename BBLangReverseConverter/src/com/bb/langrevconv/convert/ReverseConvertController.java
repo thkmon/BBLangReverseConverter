@@ -189,7 +189,7 @@ public class ReverseConvertController {
 				continue;
 			}
 			
-			if (extension != null && extension.equalsIgnoreCase("java")) {
+			if (checkIsValidExtension(extension)) {
 				if (oneLine.indexOf("XFLocale.getString") < 0) {
 					continue;
 				}
@@ -255,5 +255,21 @@ public class ReverseConvertController {
 		}
 		
 		return bModified;
+	}
+	
+	
+	// java 외의 확장자도 지원하도록 개선
+	private boolean checkIsValidExtension(String extension) {
+		if (extension == null || extension.length() == 0) {
+			return false;
+		}
+		
+		if (extension.equalsIgnoreCase("java") ||
+			extension.equalsIgnoreCase("jsp") ||
+			extension.equalsIgnoreCase("js")) {
+			return true;
+		}
+		
+		return false;
 	}
 }
